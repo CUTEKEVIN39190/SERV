@@ -1,1 +1,289 @@
-# SERV
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주민등록증 모바일 확인서비스</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Apple SD Gothic Neo", sans-serif;
+    }
+
+    body {
+      background: #f0f4ff;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header {
+      position: relative;
+      background: #00214d;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: flex-up;
+      justify-content: space-between;
+      width: 100%;
+      height: 40px;
+      max-width: 420px;
+    }
+
+    .header img {
+      width: 24px;
+      margin-right: 10px;
+    }
+
+    .header-title {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: black;
+      font-weight: 350;
+      bottom: -30px;  /* 아래에서 5px 위쪽 */
+      left: 20px;
+    }
+
+    .menu-icon {
+      position: absolute;
+      font-size: 24px;
+      bottom: 5px;
+  	  right: 20px;
+
+    }
+
+    .card-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 104%;
+      padding: 0 20px;
+    }
+
+    .card {
+      padding: 15px 15px 0px 20px;
+      min-height: 130px;
+      max-width: 480px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .photo {
+      width: 150px;
+      height: 190px;
+      margin: 0 auto 20px;
+      object-fit: cover;
+    }
+
+    .info {
+      transform: translateY(10px);
+      text-align: left;
+    }
+
+    .info strong {
+      display: block;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 5px;
+      position: relative;
+  	  left: 10px; /* 오른쪽으로 5px 이동 */
+    }
+
+    .info .birth {
+      display: block;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 10px;
+      color: #444; /* 더 또렷하게 하고 싶으면 */
+      position: relative;
+  	  left: 10px; /* 오른쪽으로 5px 이동 */
+    }
+
+    .info .address {
+      display: block;
+      font-size: 11.5px;
+      color: #dbdbdb;
+      position: relative;
+  	  left: 17px; /* 오른쪽으로 5px 이동 */
+      margin-top: -6px; /* 위로 5px 올림 */
+    }
+
+
+    .qr {
+      position: relative;
+      top: -78px;
+      text-align: right;
+    }
+
+    .qr img {
+      width: 110px;
+      height: 110px;
+    }
+
+    .progress-container {
+      position: relative;
+      top: -50px;
+      margin-top: 0;
+      background: #ddd;
+      height: 6px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #2f66ff;
+      width: 100%;
+      transition: width 1s linear;
+      position: static;
+      top: auto;
+    }
+
+    .time-left {
+      position: relative;
+      top: -40px;
+      margin-top: 0;
+      font-size: 14px;
+      color: #444;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .time-label {
+      text-align: left;
+    }
+
+    .time-sec {
+      text-align: right;
+      min-width: 40px;
+    }
+
+    .button {
+      margin-top: 20px;
+      width: calc(100% + 35px);
+      margin-left: -20px;
+      background: #1a4eff;
+      color: white;
+      padding: 19px 0;
+      font-size: 14px;
+      border: none;
+      border-radius: 0 0 12px 12px;
+      cursor: pointer;
+      display: block;
+    }
+
+    .footer-bar {
+      position: relative;
+      width: 380px;
+      height: 50px;
+      background: linear-gradient(to right, #21c8f6, #637bff, #8493ff);
+      overflow: hidden;
+      margin-bottom: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    
+    .marquee {
+      white-space: nowrap;
+      display: inline-block;
+      color: #ffffff;
+      font-size: 13px;
+      line-height: 40px;
+      font-weight: 350; /* 진하게 */
+      animation: marquee 13s linear infinite;
+      padding-left: 7px;
+      padding-right: 10px;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-title">
+      <img src="https://ifh.cc/g/D4vO66.png" alt="gov logo" />
+      주민등록증 모바일 확인서비스
+    </div>
+    <div class="menu-icon">☰</div>
+  </div>
+
+  <div class="card-container">
+    <div class="card">
+      <img src="https://ifh.cc/g/XS5nRQ.jpg" alt="photo" class="photo" />
+      
+      <div class="info">
+        <strong>김서경</strong>
+        <small class="birth">06.08.01</small>
+        <span class="address">서울특별시 중랑구</span>
+      </div>
+
+      <div class="qr">
+        <img src="https://ifh.cc/g/3zgz9Q.png" alt="QR code" />
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="time-left" id="time-left">
+        <span class="time-label">남은시간</span>
+        <span class="time-sec">30초</span>
+      </div>
+
+      <button class="button">상세정보 표시</button>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <div class="marquee">
+      캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다. 캡쳐방지 시스템이 작동 중 입니다.
+    </div>
+  </div>
+
+  <script>
+    let timeLeft = 30;
+    const timeSec = document.querySelector('.time-sec');
+    const progressBar = document.getElementById('progress-bar');
+
+    function updateTime() {
+      timeLeft--;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        timeSec.textContent = '만료됨';
+        progressBar.style.width = '0%';
+      } else {
+        timeSec.textContent = `${timeLeft}초`;
+        progressBar.style.width = `${(timeLeft / 30) * 100}%`;
+      }
+    }
+
+    const timer = setInterval(updateTime, 1000);
+  </script>
+
+</body>
+</html>
